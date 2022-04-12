@@ -26,5 +26,4 @@ RSpec.describe Subscription, type: :model do
     it { should allow_value('inactive').for(:status) }
     it { should allow_value('active').for(:status) }
   end
-
 end
