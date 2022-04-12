@@ -14,4 +14,8 @@ RSpec.describe Customer, type: :model do
     it { should validate_presence_of(:zip) }
     it { should validate_presence_of(:state) }
   end
+
+  describe 'relationships' do
+    it { should have_many :subscriptions }
+  end
 end
