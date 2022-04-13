@@ -1,24 +1,61 @@
 # README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+Tea Society is a mini project provided during Mod 4 of the Turing School of Software and Design. It's framed as take-home challenge practice for our upcoming interviews. 
 
-Things you may want to cover:
+You can use this API (no front end is built out currently) to create a tea subscription for a customer, cancel a customer's subscription, and get all of a specified customer's subscriptions.
 
-* Ruby version
+It's a local application only, and is not deployed publicly.
 
-* System dependencies
 
-* Configuration
+## Setup
 
-* Database creation
+Ruby v 2.7.2
+Rails v. 5.2.7
 
-* Database initialization
+PostgreSQL DB
 
-* How to run the test suite
+Uses these gems: 
+* jsonapi-serializer
+* pry
+* shoulda-matchers v. 3.1
+* rspec-rails
 
-* Services (job queues, cache servers, search engines, etc.)
+To work on this repo, clone a copy to your local machine.
+Make sure to run a `bundle install` and set up your database with `rails db:create,migrate,seed` to get started!
 
-* Deployment instructions
+## Supported Endpoints
 
-* ...
+### *POST 'api/v1/subscriptions'* 
+to create a new subscription. Sample request body (JSON): 
+
+```
+{ "subscription": {
+      "title": "Monthly Fix",
+      "price": 25.99,
+      "frequency": "monthly",
+      "customer_id": 1,
+      "tea_id": 1
+    }
+}
+```
+Returns the newly-created subscription details. 
+<br/>
+<br/>
+
+### *PATCH 'api/v1/subscriptions'* 
+to cancel an existing subscription. Sample request body (JSON):
+```
+{
+    "subscription": {
+        "id": 1,
+        "customer_id": 1,
+        "status": "inactive"
+    }
+}
+```
+Returns the full subscription details with changed status.
+<br/>
+<br/>
+
+### *GET 'api/v1/customer/:customer_id/subscriptions'*
+ to see all of a customer's subscriptions, regardless of status. No request body required.
