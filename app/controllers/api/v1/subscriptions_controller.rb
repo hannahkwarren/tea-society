@@ -12,10 +12,9 @@ class Api::V1::SubscriptionsController < ApplicationController
   end
 
   def edit
-    binding.pry
-    customer = Customer.find_by(id: subscription_params[:customer_id])
-    if customer.exists?
-      subscription = Subscription.find(id: subscription_params[:id])
+    customer = Customer.find(subscription_params[:customer_id])
+    if customer.present?
+      subscription = Subscription.find(subscription_params[:id])
       subscription.status = subscription_params[:status]
       if subscription.save
         render json: SubscriptionSerializer.new(subscription)
@@ -23,11 +22,11 @@ class Api::V1::SubscriptionsController < ApplicationController
         render json: subscription.errors.details, status: 400
       end
     end
-
   end
+
   private
 
   def subscription_params
-    params.require(:subscription).permit(:title, :price, :frequency, :customer_id, :tea_id)
+    params.require(:subscription).permit(:id, :title, :price, :status, :frequency, :customer_id, :tea_id)
   end
 end
