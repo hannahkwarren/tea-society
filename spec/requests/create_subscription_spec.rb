@@ -58,7 +58,7 @@ RSpec.describe 'Create Subscription', type: :request do
     expect(parsed[:error]).to eq("Couldn't find Customer without an ID")
   end
 
-  it 'edge case: invalid data should result in error' do
+  it 'edge case: invalid customer_id should result in error' do
     json_payload = { subscription: {
                       title: 'Monthly Fix',
                       price: 25.99,
@@ -73,5 +73,22 @@ RSpec.describe 'Create Subscription', type: :request do
     expect(response).to have_http_status(400)
     parsed = JSON.parse(response.body, symbolize_names: true)
     expect(parsed[:error]).to eq("Couldn't find Customer with 'id'=500")
+  end
+
+  it 'edge case: invalid tea_id should result in error' do
+    json_payload = { subscription: {
+                      title: 'Monthly Fix',
+                      price: 25.99,
+                      frequency: 'monthly',
+                      tea_id: 500,
+                      customer_id: @cust1.id
+                      }
+                    }
+
+    post '/api/v1/subscriptions', params: json_payload
+
+    expect(response).to have_http_status(400)
+    parsed = JSON.parse(response.body, symbolize_names: true)
+    expect(parsed[:error]).to eq("Couldn't find Tea with 'id'=500")
   end
 end
