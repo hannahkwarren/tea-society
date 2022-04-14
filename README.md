@@ -1,8 +1,8 @@
 # README
 
-Tea Society is a mini project provided during Mod 4 of the Turing School of Software and Design. It's framed as take-home challenge practice for our upcoming interviews. 
+Tea Society is a mini project provided during Mod 4 of the Turing School of Software and Design. It's framed as take-home challenge practice for our upcoming job interviews. 
 
-You can use this API (no front end is built out currently) to create a tea subscription for a customer, cancel a customer's subscription, and get all of a specified customer's subscriptions.
+This API (no front end is built out currently) supports creating a tea subscription for a customer, cancelling a customer's subscription by changing the status to inactive, and getting all of a specified customer's subscriptions (inactive and active).
 
 It's a local application only, and is not deployed publicly.
 
