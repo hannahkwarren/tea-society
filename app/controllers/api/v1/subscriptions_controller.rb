@@ -6,6 +6,7 @@ class Api::V1::SubscriptionsController < ApplicationController
     customer = Customer.find(subscription_params[:customer_id])
     tea = Tea.find(subscription_params[:tea_id])
     subscription = subscription_params
+
     if customer.present? && tea.present?
       new_subscription = Subscription.new(subscription)
       if new_subscription.save
@@ -20,8 +21,9 @@ class Api::V1::SubscriptionsController < ApplicationController
 
   def edit
     customer = Customer.find(subscription_params[:customer_id])
-    if customer.present?
-      subscription = Subscription.find(subscription_params[:id])
+    subscription = Subscription.find(subscription_params[:id])
+
+    if customer.present? && subscription.present?
       subscription.status = subscription_params[:status]
       if subscription.save
         render json: SubscriptionSerializer.new(subscription)
