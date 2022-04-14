@@ -3,27 +3,28 @@
 require 'rails_helper'
 
 RSpec.describe 'Create Subscription', type: :request do
+  before(:each) do
+    @cust1 = Customer.create( first_name: 'Hannah',
+                              last_name: 'Warner',
+                              email: 'hannah@mail.com',
+                              address: '123 Main St',
+                              city: 'New York',
+                              state: 'NY',
+                              zip: '11206')
+
+    @tea1 = Tea.create( name: 'Sun Moon Lake Hong Cha',
+                        description: 'Light, naturally sweet and floral oolong tea',
+                        temperature_fahrenheit: 190,
+                        brew_time_mins: 4)
+  end
+
   it 'creates a new subscription' do
-    cust1 = Customer.create(first_name: 'Hannah',
-                    last_name: 'Warner',
-                    email: 'hannah@mail.com',
-                    address: '123 Main St',
-                    city: 'New York',
-                    state: 'NY',
-                    zip: '11206')
-
-    tea1 = Tea.create( name: 'Sun Moon Lake Hong Cha',
-                description: 'Light, naturally sweet and floral oolong tea',
-                temperature_fahrenheit: 190,
-                brew_time_mins: 4
-                      )
-
     json_payload = { subscription: {
       title: 'Monthly Fix',
       price: 25.99,
       frequency: 'monthly',
-      customer_id: cust1.id,
-      tea_id: tea1.id
+      customer_id: @cust1.id,
+      tea_id: @tea1.id
       }
     }
 
@@ -41,25 +42,11 @@ RSpec.describe 'Create Subscription', type: :request do
   end
 
   it 'edge case: missing data should result in error' do
-    Customer.create(first_name: 'Hannah',
-                            last_name: 'Warner',
-                            email: 'hannah@mail.com',
-                            address: '123 Main St',
-                            city: 'New York',
-                            state: 'NY',
-                            zip: '11206')
-
-    tea1 = Tea.create(  name: 'Sun Moon Lake Hong Cha',
-                        description: 'Light, naturally sweet and floral oolong tea',
-                        temperature_fahrenheit: 190,
-                        brew_time_mins: 4
-                      )
-
     json_payload = { subscription: {
                       title: 'Monthly Fix',
                       price: 25.99,
                       frequency: 'monthly',
-                      tea_id: tea1.id
+                      tea_id: @tea1.id
                       # missing customer id
                       }
                     }
@@ -68,7 +55,23 @@ RSpec.describe 'Create Subscription', type: :request do
 
     expect(response).to have_http_status(400)
     parsed = JSON.parse(response.body, symbolize_names: true)
-
     expect(parsed[:error]).to eq("Couldn't find Customer without an ID")
+  end
+
+  it 'edge case: invalid data should result in error' do
+    json_payload = { subscription: {
+                      title: 'Monthly Fix',
+                      price: 25.99,
+                      frequency: 'monthly',
+                      tea_id: @tea1.id,
+                      customer_id: 500
+                      }
+                    }
+
+    post '/api/v1/subscriptions', params: json_payload
+
+    expect(response).to have_http_status(400)
+    parsed = JSON.parse(response.body, symbolize_names: true)
+    expect(parsed[:error]).to eq("Couldn't find Customer with 'id'=500")
   end
 end
