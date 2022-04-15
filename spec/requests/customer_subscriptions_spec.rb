@@ -54,6 +54,6 @@ RSpec.describe "Customer's subscriptions", type: :request do
 
     expect(response).to have_http_status(400)
     parsed = JSON.parse(response.body, symbolize_names: true)
-    expect(parsed[:error]).to eq("Couldn't find Customer with 'id'=1002")
+    expect(parsed[:data][:error]).to eq("Couldn't find Customer with 'id'=1002")
   end
 end

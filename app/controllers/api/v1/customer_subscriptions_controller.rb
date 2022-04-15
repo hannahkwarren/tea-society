@@ -9,13 +9,13 @@ class Api::V1::CustomerSubscriptionsController < ApplicationController
     if subscriptions.present?
       render json: SubscriptionSerializer.new(subscriptions)
     else
-      render json: subscriptions.errors.details, status: 400
+      render json: SubscriptionSerializer.new(subscriptions.errors.details), status: 400
     end
   end
 
   private
 
   def handle_error(error)
-    render json: { error: error.to_s }, status: :bad_request
+    render json: { data: { error: error.to_s } }, status: :bad_request
   end
 end

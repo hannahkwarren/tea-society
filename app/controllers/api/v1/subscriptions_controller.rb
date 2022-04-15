@@ -12,14 +12,14 @@ class Api::V1::SubscriptionsController < ApplicationController
       if new_subscription.save
         render json: SubscriptionSerializer.new(new_subscription)
       else
-        render json: new_subscription.errors.details, status: 400
+        render json: SubscriptionSerializer.new(new_subscription.errors.details), status: 400
       end
     else
       render json: { error: 'Invalid request.' }
     end
   end
 
-  def edit
+  def update
     customer = Customer.find(subscription_params[:customer_id])
     subscription = Subscription.find(subscription_params[:id])
 
@@ -28,10 +28,10 @@ class Api::V1::SubscriptionsController < ApplicationController
       if subscription.save
         render json: SubscriptionSerializer.new(subscription)
       else
-        render json: subscription.errors.details, status: 400
+        render json: SubscriptionSerializer.serialize(subscription.errors.details), status: 400
       end
     else
-      render json: customer.errors.details, status: 400
+      render json: CustomerSerializer.new(customer.errors.details), status: 400
     end
   end
 
@@ -42,6 +42,6 @@ class Api::V1::SubscriptionsController < ApplicationController
   end
 
   def handle_error(error)
-    render json: { error: error.to_s }, status: :bad_request
+    render json: { data: { error: error.to_s } }, status: :bad_request
   end
 end

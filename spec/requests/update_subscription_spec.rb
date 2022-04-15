@@ -58,7 +58,7 @@ RSpec.describe 'Edit Subscription', type: :request do
 
     expect(response).to have_http_status(400)
     parsed = JSON.parse(response.body, symbolize_names: true)
-    expect(parsed[:error]).to eq("Couldn't find Subscription without an ID")
+    expect(parsed[:data][:error]).to eq("Couldn't find Subscription without an ID")
   end
 
   it 'sad path: invalid subscription data' do
@@ -74,7 +74,7 @@ RSpec.describe 'Edit Subscription', type: :request do
 
     expect(response).to have_http_status(400)
     parsed = JSON.parse(response.body, symbolize_names: true)
-    expect(parsed[:error]).to eq("Couldn't find Subscription with 'id'=5000")
+    expect(parsed[:data][:error]).to eq("Couldn't find Subscription with 'id'=5000")
   end
 
   it 'edge case: missing customer data' do
@@ -90,7 +90,7 @@ RSpec.describe 'Edit Subscription', type: :request do
 
     expect(response).to have_http_status(400)
     parsed = JSON.parse(response.body, symbolize_names: true)
-    expect(parsed[:error]).to eq("Couldn't find Customer without an ID")
+    expect(parsed[:data][:error]).to eq("Couldn't find Customer without an ID")
   end
 
   it 'sad path: invalid customer data' do
@@ -106,6 +106,6 @@ RSpec.describe 'Edit Subscription', type: :request do
 
     expect(response).to have_http_status(400)
     parsed = JSON.parse(response.body, symbolize_names: true)
-    expect(parsed[:error]).to eq("Couldn't find Customer with 'id'=5600")
+    expect(parsed[:data][:error]).to eq("Couldn't find Customer with 'id'=5600")
   end
 end

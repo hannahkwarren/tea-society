@@ -55,7 +55,7 @@ RSpec.describe 'Create Subscription', type: :request do
 
     expect(response).to have_http_status(400)
     parsed = JSON.parse(response.body, symbolize_names: true)
-    expect(parsed[:error]).to eq("Couldn't find Customer without an ID")
+    expect(parsed[:data][:error]).to eq("Couldn't find Customer without an ID")
   end
 
   it 'edge case: missing tea data should result in error' do
@@ -71,7 +71,7 @@ RSpec.describe 'Create Subscription', type: :request do
 
     expect(response).to have_http_status(400)
     parsed = JSON.parse(response.body, symbolize_names: true)
-    expect(parsed[:error]).to eq("Couldn't find Tea without an ID")
+    expect(parsed[:data][:error]).to eq("Couldn't find Tea without an ID")
   end
 
   it 'edge case: invalid customer_id should result in error' do
@@ -88,7 +88,7 @@ RSpec.describe 'Create Subscription', type: :request do
 
     expect(response).to have_http_status(400)
     parsed = JSON.parse(response.body, symbolize_names: true)
-    expect(parsed[:error]).to eq("Couldn't find Customer with 'id'=500")
+    expect(parsed[:data][:error]).to eq("Couldn't find Customer with 'id'=500")
   end
 
   it 'edge case: invalid tea_id should result in error' do
@@ -105,6 +105,6 @@ RSpec.describe 'Create Subscription', type: :request do
 
     expect(response).to have_http_status(400)
     parsed = JSON.parse(response.body, symbolize_names: true)
-    expect(parsed[:error]).to eq("Couldn't find Tea with 'id'=500")
+    expect(parsed[:data][:error]).to eq("Couldn't find Tea with 'id'=500")
   end
 end
